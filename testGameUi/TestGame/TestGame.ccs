@@ -1,0 +1,33 @@
+<Solution>
+  <PropertyGroup Name="TestGame" Version="3.10.0.0" Type="CocosStudio" />
+  <SolutionFolder>
+    <Group ctype="ResourceGroup">
+      <RootFolder Name=".">
+        <Folder Name="panel">
+          <Folder Name="loadingPanel">
+            <Folder Name="res">
+              <Folder Name="ui">
+                <Project Name="LoadingPanel.csd" Type="Layer" />
+              </Folder>
+              <Folder Name="img">
+                <Image Name="bg_pic.jpg" />
+                <Image Name="tt_2_pic.png" />
+                <Image Name="tt_pic.png" />
+              </Folder>
+            </Folder>
+          </Folder>
+          <Folder Name="testPanel">
+            <Folder Name="res">
+              <Folder Name="ui">
+                <Project Name="TestPanel.csd" Type="Layer" />
+              </Folder>
+              <Folder Name="img">
+                <Image Name="renwu.png" />
+              </Folder>
+            </Folder>
+          </Folder>
+        </Folder>
+      </RootFolder>
+    </Group>
+  </SolutionFolder>
+</Solution>
