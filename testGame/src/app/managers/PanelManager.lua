@@ -59,7 +59,7 @@ function _M:insertPanelUrlList(filePath)
     if(not self.panelUrlListMeta)then
         self.panelUrlListMeta = self.panelUrlListMeta or {};
         setmetatable(self.PANEL_URL_LIST,{
-            _index = function(_t,key)
+            __index = function(_t,key)
                 for k , v in pairs(self.panelUrlListMeta) do
                     if(v[key])then
                         return v[key];

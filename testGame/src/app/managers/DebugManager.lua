@@ -4,7 +4,7 @@ function _M:ctor()
     
 end
 function _M:registerDebugBlock()
-    local breakSocketHandle,_ = require("LuaDebugjit")("localhost",5441);
+    local breakSocketHandle,_ = require("LuaDebug")("localhost",5441);
     breakSocketHandle();
     if(self.luaBlockDebugTimer)then
         cc.Director:getInstance():unSchedule(self.luaBlockDebugTimer);
