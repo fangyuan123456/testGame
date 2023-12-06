@@ -5,7 +5,8 @@
 #include "scripting/lua-bindings/manual/CCComponentLua.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-
+#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "scripting/lua-bindings/manual/CCLuaEngine.h"
 int lua_cocos2dx_Ref_release(lua_State* tolua_S)
 {
     int argc = 0;
@@ -30573,16 +30574,17 @@ int lua_cocos2dx_ActionFloat_create(lua_State* tolua_S)
         ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ActionFloat:create");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ActionFloat:create");
         
-        LUA_FUNCTION callFunc = toluafix_ref_function(tolua_S, 5, 0);
+        LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 5, 0);
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ActionFloat_create'", nullptr);
             return 0;
         }
-        cocos2d::ActionFloat* ret = cocos2d::ActionFloat::create(arg0, arg1, arg2, [=](_value) {
+        cocos2d::ActionFloat* ret = cocos2d::ActionFloat::create(arg0, arg1, arg2, [=](float _value) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-            tolua_pushnumber(tolua_S, (lua_Number)_value);
-            stack->executeFunctionByHandler(callFunc, 1);
+            tolua_pushnumber(tolua_S, _value);
+            stack->executeFunctionByHandler(handler, 1);
+            LuaEngine::getInstance()->removeScriptHandler(handler);
         });
         object_to_luaval<cocos2d::ActionFloat>(tolua_S, "cc.ActionFloat",(cocos2d::ActionFloat*)ret);
         return 1;

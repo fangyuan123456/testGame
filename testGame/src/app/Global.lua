@@ -13,7 +13,7 @@ setmetatable(global,{
     end
 })
 function global.init()
-    global.hostCfg = require("app.config.hostCfg");
+    require("app.config.hostCfg");
 end
 function global.reInit()
     local checkIsGameScript = function(urlName)
