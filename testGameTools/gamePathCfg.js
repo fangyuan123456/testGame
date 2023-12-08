@@ -1,4 +1,4 @@
 module.exports = {
-    toolsPath:"D:/fangyuan/cocosLua/testGame/testGameTools/",
-    gamePath:"D:/fangyuan/cocosLua/testGame/testGame/"
+    toolsPath:"E:/git/testGame/testGameTools/",
+    gamePath:"E:/git/testGame/testGame/"
 }

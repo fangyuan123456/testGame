@@ -50,6 +50,7 @@ android {
         res.srcDir "res"
         jniLibs.srcDir "libs"
         manifest.srcFile "AndroidManifest.xml"
+        assets.srcDir "assets"
     }
 
     externalNativeBuild {
@@ -161,22 +162,25 @@ def compileLua(srcDir, dstDir, doCompile, is64bit, doEncrypt) {
 
 android.applicationVariants.all { variant ->
     // delete previous files first
-    delete "${buildDir}/intermediates/assets/${variant.dirName}"
-
-    variant.mergeAssets.doLast {
+    def project_root_folder = "${projectDir}/../../../.."
+    def dest_assets_folder = "${projectDir}/assets"
+    delete dest_assets_folder;
+    def targetName = variant.name.capitalize();
+    def copyTaskName = "copy${targetName}ResourcesToAssests"
+    tasks.register(copyTaskName){
         copy {
-           from "${buildDir}/../../../../../res"
-           into "${buildDir}/intermediates/assets/${variant.dirName}/res"
+            from project_root_folder+"/res"
+            into dest_assets_folder+"/res"
         }
 
         copy {
-            from "${buildDir}/../../../../../src"
-            into "${buildDir}/intermediates/assets/${variant.dirName}/src"
+            from project_root_folder+"/src"
+            into dest_assets_folder+"/src"
         }
 
         // copy {
         //     from "${buildDir}/../../../../cocos2d-x/cocos/scripting/lua-bindings/script"
-        //     into  "${buildDir}/intermediates/assets/${variant.dirName}/src/cocos"
+        //     into  dest_assets_folder+"/src/cocos"
         // }
 
         // compile & encrypt the scripts if necessary
@@ -216,41 +220,42 @@ android.applicationVariants.all { variant ->
                     buildType = 0
                 }
             }
-
+            println("buildType is ${buildType}")
             // invoke cocos command to compile & encrypt the lua files
             switch (buildType) {
                 case -1:
-                    compileLua("${buildDir}/intermediates/assets/${variant.dirName}/src",
-                               "${buildDir}/intermediates/assets/${variant.dirName}/src",
-                               false, false, encryptLua)
+                    compileLua(dest_assets_folder+"/src",
+                            dest_assets_folder+"/src",
+                            false, false, encryptLua)
                     break
                 case 0:
-                    compileLua("${buildDir}/intermediates/assets/${variant.dirName}/src",
-                               "${buildDir}/intermediates/assets/${variant.dirName}/src",
-                               true, false, encryptLua)
+                    compileLua(dest_assets_folder+"/src",
+                            dest_assets_folder+"/src",
+                            true, false, encryptLua)
                     break
                 case 1:
-                    compileLua("${buildDir}/intermediates/assets/${variant.dirName}/src",
-                               "${buildDir}/intermediates/assets/${variant.dirName}/src/64bit",
-                               true, true, encryptLua)
+                    compileLua(dest_assets_folder+"/src",
+                            dest_assets_folder+"/src/64bit",
+                            true, true, encryptLua)
 
                     // remove the lua files in src dir
-                    delete fileTree("${buildDir}/intermediates/assets/${variant.dirName}/src") {
+                    delete fileTree(dest_assets_folder+"/src") {
                         include '**/*.lua'
                     }
-                    delete "${buildDir}/intermediates/assets/${variant.dirName}/src/cocos"
+                    delete dest_assets_folder+"/src/cocos"
                     break
                 case 2:
-                    compileLua("${buildDir}/intermediates/assets/${variant.dirName}/src",
-                               "${buildDir}/intermediates/assets/${variant.dirName}/src/64bit",
-                               true, true, encryptLua)
-                    compileLua("${buildDir}/intermediates/assets/${variant.dirName}/src",
-                               "${buildDir}/intermediates/assets/${variant.dirName}/src",
-                               true, false, encryptLua)
+                    compileLua(dest_assets_folder+"/src",
+                            dest_assets_folder+"/src/64bit",
+                            true, true, encryptLua)
+                    compileLua(dest_assets_folder+"/src",
+                            dest_assets_folder+"/src",
+                            true, false, encryptLua)
                     break
             }
         }
     }
+    tasks.getByName("pre${targetName}Build").dependsOn copyTaskName;
 }
 
 dependencies {
