@@ -7,7 +7,7 @@ function _M:scheduleOnce(callBack,delayTime,target)
         if(not target or not tolua.isnull(target))then
             callBack(target)
         end
-        self:unScedule(scheduleId)
+        self:unSchedule(scheduleId)
     end,delayTime or 0,false);
     if(target)then
         target.scheduleIdMap = target.scheduleIdMap or {};

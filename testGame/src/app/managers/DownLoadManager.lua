@@ -92,7 +92,7 @@ function _M:compareVersion(version1,version2)
         end
     end
 end
-function _M:getDownLoadVersinNameList(fileName)
+function _M:getDownLoadVersionNameList(fileName)
     local cfg = self:getServerZipVersionCfg(fileName);
     if(cfg)then
        local localVersion = self:getLocalDownLoadVersion(fileName); 

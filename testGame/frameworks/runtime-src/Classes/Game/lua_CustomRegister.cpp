@@ -1,8 +1,7 @@
-#include "lua_CustomRegister.h"
+#include "UnZipManager.h"
 #include "lua_CustomRegister.h"
 #include "Game.h"
-#include "UnZipManager.h"
-#include "./../../../cocos/scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "./../../../cocos2d-x/cocos/scripting/lua-bindings/manual/LuaBasicConversions.h"
 int tolua_UnZipManager_unZip(lua_State* tolua_S)
 {
 	int argc = 0;
@@ -14,7 +13,7 @@ int tolua_UnZipManager_unZip(lua_State* tolua_S)
 
 
 #if COCOS2D_DEBUG >= 1
-	if (!tolua_isusertype(tolua_S, 1, "Game", 0, &tolua_err)) goto tolua_lerror;
+	if (!tolua_isusertable(tolua_S, 1, "Game", 0, &tolua_err)) goto tolua_lerror;
 #endif
 
 	argc = lua_gettop(tolua_S) - 1;
@@ -61,7 +60,7 @@ int tolua_Game_getBaseVersion(lua_State* tolua_S)
 
 
 #if COCOS2D_DEBUG >= 1
-	if (!tolua_isusertype(tolua_S, 1, "Game", 0, &tolua_err)) goto tolua_lerror;
+	if (!tolua_isusertable(tolua_S, 1, "Game", 0, &tolua_err)) goto tolua_lerror;
 #endif
 
 	argc = lua_gettop(tolua_S) - 1;

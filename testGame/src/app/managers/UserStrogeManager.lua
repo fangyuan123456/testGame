@@ -47,7 +47,7 @@ function _M:setVersionItem(key,value)
         strogeData[key] = value;
     end
     local writeStr = json.encode(strogeData);
-    local isOk = io.writeFile(path,writeStr,"w+");
+    local isOk = io.writefile(path,writeStr,"w+");
     if(not isOk)then
         global.logMgr.err("io.writeFile Fail!:%s,%s",writeStr,path)
         return false

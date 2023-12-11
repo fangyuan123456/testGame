@@ -1,2 +1,0 @@
-node testGameServer.js
-pause
