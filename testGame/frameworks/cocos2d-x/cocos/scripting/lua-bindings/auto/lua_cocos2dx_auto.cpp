@@ -30582,9 +30582,8 @@ int lua_cocos2dx_ActionFloat_create(lua_State* tolua_S)
         }
         cocos2d::ActionFloat* ret = cocos2d::ActionFloat::create(arg0, arg1, arg2, [=](float _value) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-            tolua_pushnumber(tolua_S, _value);
+            stack->pushFloat(_value);
             stack->executeFunctionByHandler(handler, 1);
-            LuaEngine::getInstance()->removeScriptHandler(handler);
         });
         object_to_luaval<cocos2d::ActionFloat>(tolua_S, "cc.ActionFloat",(cocos2d::ActionFloat*)ret);
         return 1;
