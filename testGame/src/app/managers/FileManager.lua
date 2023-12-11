@@ -17,13 +17,16 @@ function _M:removeDirectory(dirPath)
 end
 function _M:insertSearchPaths(fileName)
     local insertList = {
-        fileName.."res/",
-        fileName.."src/"
+        fileName.."/res/",
+        fileName.."/src/"
     }
     local searchList = fileUtils:getSearchPaths();
     local newSearchList = {};
     for i = 1 , #insertList do
         table.insert(newSearchList,self:getWritablePath()..insertList[i]);
+    end
+    for i = 1 , #searchList do
+        table.insert(newSearchList,searchList[i]);
     end
     dump(newSearchList)
     fileUtils:setSearchPaths(newSearchList);
