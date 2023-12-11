@@ -13,7 +13,6 @@ setmetatable(global,{
     end
 })
 function global.init()
-    require("app.config.hostCfg");
 end
 function global.reInit()
     local checkIsGameScript = function(urlName)
@@ -25,6 +24,7 @@ function global.reInit()
     for k , v in pairs(loadedList) do
         if(checkIsGameScript(k))then
             package.loaded[k] = nil;
+            require(k);
         end
     end
 end
