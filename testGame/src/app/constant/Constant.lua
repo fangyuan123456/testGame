@@ -1,5 +1,5 @@
 Constant = {}
-Constant.DONWLOAD_STATE = {
+Constant.DOWNLOAD_STATE = {
     NONE = 1,
     DOWN_LOAD = 2,
     DECOMPRESSION = 3,

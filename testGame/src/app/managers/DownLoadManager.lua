@@ -33,7 +33,7 @@ function _M:getServerZipVersionCfg(versionFileName)
 end
 function _M:getDownLoader()
     if(not self.downLoader)then
-        self.downLoader = cc.Donwloader:new({
+        self.downLoader = cc.Downloader:new({
             countOfMaxProcessingTasks = 32,
             timeoutInSecconds = 120
         })
@@ -43,12 +43,12 @@ function _M:getDownLoader()
 end
 function _M:checkAndUnZipFile(versionFileName)
     local downLoadCfg = self:getDownLoadCfg(versionFileName);
-    self:setDownLoadState(versionFileName,Constant.DONWLOAD_STATE.DECOMPRESSION)
+    self:setDownLoadState(versionFileName,Constant.DOWNLOAD_STATE.DECOMPRESSION)
     self:unZipFile(versionFileName);
     return true;
 end
 function _M:_addDownloadExEvents(downLoader)
-    downLoader.setOnTaskProgress(function(task,bytesReceived,totalBytesReceived,totalBytesExpected)
+    downLoader:setOnTaskProgress(function(task,bytesReceived,totalBytesReceived,totalBytesExpected)
         global.debugMgr:globalXpcall(function()
             local versionFileName = task.identifier;
             local programObj = self.downLoadProgramMap[versionFileName];
@@ -62,7 +62,7 @@ function _M:_addDownloadExEvents(downLoader)
         global.debugMgr:globalXpcall(function()
             local versionFileName = task.identifier;
             if(not self:checkAndUnZipFile(versionFileName))then
-                self:setDownLoadState(versionFileName,Constant.DONWLOAD_STATE.COMPRESSION_END);
+                self:setDownLoadState(versionFileName,Constant.DOWNLOAD_STATE.COMPRESSION_END);
                 self:runDownLoadFunc(versionFileName);
             end
         end)
@@ -73,7 +73,7 @@ function _M:_addDownloadExEvents(downLoader)
             local programObj = self.downLoadProgramMap[versionFileName];
             programObj.retryTimes = programObj.retryTimes - 1;
             if(programObj.retryTimes<0)then
-                self:setDownLoadState(versionFileName,Constant.DONWLOAD_STATE.DOWN_LOAD_FAIL)
+                self:setDownLoadState(versionFileName,Constant.DOWNLOAD_STATE.DOWN_LOAD_FAIL)
                 self:runDownLoadFunc(versionFileName);
             else
                 global.scheduleMgr:scheduleOnce(function()
@@ -141,7 +141,7 @@ function _M:downLoadRes(fileName,parameter,downLoadOrder)
     local completeCallFunc = function()
         global.fileMgr:insertSearchPaths(fileName);
         if(parameter.completeFunc)then
-            parameter.completeFunc();
+            parameter.completeFunc(#fileList>0);
         end
     end
     local index = 0;
@@ -202,13 +202,18 @@ function _M:setDownLoadState(versionFileName,state)
     if(self.downLoadProgramMap[versionFileName])then
         self.downLoadProgramMap[versionFileName].state  = state;
         local downLoadCfg = self:getDownLoadCfg(versionFileName);
-        global.userStrogeMgr:setVersionItem(downLocalCfg.dirName.."_state",state);
+        global.userStrogeMgr:setVersionItem(downLoadCfg.dirName.."_state",state);
     end
+end
+function _M:getDownLoadState(versionFileName)
+    local downLoadCfg = self:getDownLoadCfg(versionFileName);
+    local state = global.userStrogeMgr:getVersionItem(downLoadCfg.dirName.."_state") or Constant.DOWNLOAD_STATE.DOWN_LOAD;
+    return state;
 end
 function _M:downLoadByOrder()
     local downOrderMap = {};
     for k , v in pairs(self.downLoadProgramMap)do
-        if(v.state ~= Constant.DONWLOAD_STATE.COMPRESSION_END)then
+        if(v.state ~= Constant.DOWNLOAD_STATE.COMPRESSION_END)then
             downOrderMap[v.downLoadOrder] = downOrderMap[v.downLoadOrder] or {};
             v.fileName = k;
             table.insert(downOrderMap[v.downLoadOrder],v);
@@ -238,7 +243,7 @@ function _M:unZipFile(versionFileName)
     local unZipPath = writeablePath..downLoadCfg.unZipPath;
     local destPath = writeablePath..downLoadCfg.destPath;
     Game:unZip(zipPath,unZipPath,destPath,function()
-        self:setDownLoadState(versionFileName,Constant.DONWLOAD_STATE.COMPRESSION_END)
+        self:setDownLoadState(versionFileName,Constant.DOWNLOAD_STATE.COMPRESSION_END)
         self:runDownLoadFunc(versionFileName);
     end,function()
     
@@ -246,7 +251,7 @@ function _M:unZipFile(versionFileName)
 end
 function _M:startDownLoad(versionFileName)
     local programObj = self.downLoadProgramMap[versionFileName];
-    if(programObj.state == Constant.DONWLOAD_STATE.DECOMPRESSION)then
+    if(programObj.state == Constant.DOWNLOAD_STATE.DECOMPRESSION)then
         self:unZipFile(versionFileName);
     else
         local downLoader = self:getDownLoader();
@@ -254,7 +259,7 @@ function _M:startDownLoad(versionFileName)
         local fullUrl = global.define.downLoadUrl..downLoadCfg.url;
         local downLoadSavePath = global.fileMgr:getWritablePath()..versionFileName;
         downLoader:createDownloadFileTask(fullUrl,downLoadSavePath,versionFileName);
-        self:setDownLoadState(versionFileName,Constant.DONWLOAD_STATE.DOWN_LOAD);
+        self:setDownLoadState(versionFileName,Constant.DOWNLOAD_STATE.DOWN_LOAD);
         self:runDownLoadFunc(versionFileName);
     end
 end
@@ -270,14 +275,14 @@ function _M:runDownLoadFunc(versionFileName,isRunLastFunc)
     if(isRunLastFunc)then
         startIndex = #progressList;
     end
-    if(obj.state == Constant.DONWLOAD_STATE.DOWN_LOAD)then
+    if(obj.state == Constant.DOWNLOAD_STATE.DOWN_LOAD)then
         for i = startIndex,#progressList do
             local callFunc = progressList[i];
             local progressData = obj.progressData;
             local progress = (progressData.bytesReceived/progressData.totalBytesReceived)-0.1;
             callFunc(progress,progressData.bytesReceived,progressData.totalBytesReceived)
         end
-    elseif(obj.state == Constant.DONWLOAD_STATE.COMPRESSION_END)then
+    elseif(obj.state == Constant.DOWNLOAD_STATE.COMPRESSION_END)then
         for i = startIndex,#progressList do
             local callFunc = progressList[i];
             callFunc(1);
@@ -287,7 +292,7 @@ function _M:runDownLoadFunc(versionFileName,isRunLastFunc)
             callFunc();
         end
         self:setLocalDownLoadVersion(versionFileName);
-    elseif(obj.state == Constant.DONWLOAD_STATE.DOWN_LOAD_FAIL)then
+    elseif(obj.state == Constant.DOWNLOAD_STATE.DOWN_LOAD_FAIL)then
         for i = startIndex , #failList do
             local callFunc = failList[i];
             callFunc();
