@@ -1,0 +1,8 @@
+[2023-09-06T11:44:07.955] [INFO] gameLog - Connector
+[2023-09-06T11:45:12.142] [INFO] gameLog - Connector
+[2023-09-06T11:45:35.495] [INFO] gameLog - initServer
+[2023-09-06T11:55:44.678] [ERROR] gameLog - [rpcClient.ts] socket closed, reconnect the rpc server later: map-0
+[2023-09-06T11:55:49.713] [ERROR] gameLog - [rpcClient.ts] socket closed, reconnect the rpc server later: info-0
+[2023-09-06T17:26:13.003] [INFO] gameLog - initServer
+[2023-09-06T18:00:57.783] [ERROR] gameLog - [rpcClient.ts] socket closed, reconnect the rpc server later: map-0
+[2023-09-06T18:01:02.859] [ERROR] gameLog - [rpcClient.ts] socket closed, reconnect the rpc server later: info-0

@@ -1,0 +1,15 @@
+[2023-09-06T11:39:28.866] [INFO] gameLog - --->  [ loginHttp ]  http listening at 5101
+[2023-09-06T11:44:08.006] [INFO] gameLog - Login
+[2023-09-06T11:44:08.217] [INFO] gameLog - --->  [ loginHttp ]  http listening at 5101
+[2023-09-06T11:45:12.126] [INFO] gameLog - Login
+[2023-09-06T11:45:12.329] [INFO] gameLog - --->  [ loginHttp ]  http listening at 5101
+[2023-09-06T11:45:35.517] [INFO] gameLog - initServer
+[2023-09-06T11:45:35.806] [INFO] gameLog - --->  [ loginHttp ]  http listening at 5101
+[2023-09-06T11:55:44.680] [ERROR] gameLog - [rpcClient.ts] socket closed, reconnect the rpc server later: map-0
+[2023-09-06T11:55:49.714] [ERROR] gameLog - [rpcServer.ts] a rpc client disconnected: info-0, ::ffff:127.0.0.1
+[2023-09-06T11:55:54.730] [ERROR] gameLog - [rpcServer.ts] a rpc client disconnected: con-0, ::ffff:127.0.0.1
+[2023-09-06T17:26:13.024] [INFO] gameLog - initServer
+[2023-09-06T17:26:13.246] [INFO] gameLog - --->  [ loginHttp ]  http listening at 5101
+[2023-09-06T18:00:57.790] [ERROR] gameLog - [rpcClient.ts] socket closed, reconnect the rpc server later: map-0
+[2023-09-06T18:01:02.860] [ERROR] gameLog - [rpcServer.ts] a rpc client disconnected: info-0, ::ffff:127.0.0.1
+[2023-09-06T18:01:07.883] [ERROR] gameLog - [rpcServer.ts] a rpc client disconnected: con-0, ::ffff:127.0.0.1

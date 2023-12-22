@@ -1,0 +1,10 @@
+[2023-09-06T11:45:34.870] [INFO] gameLog - initServer
+[2023-09-06T11:55:44.678] [ERROR] gameLog - [master.ts] a monitor disconnected: map-0, ::ffff:127.0.0.1
+[2023-09-06T11:55:49.714] [ERROR] gameLog - [master.ts] a monitor disconnected: info-0, ::ffff:127.0.0.1
+[2023-09-06T11:55:54.729] [ERROR] gameLog - [master.ts] a monitor disconnected: con-0, ::ffff:127.0.0.1
+[2023-09-06T11:55:59.762] [ERROR] gameLog - [master.ts] a monitor disconnected: login, ::ffff:127.0.0.1
+[2023-09-06T17:26:12.354] [INFO] gameLog - initServer
+[2023-09-06T18:00:57.792] [ERROR] gameLog - [master.ts] a monitor disconnected: map-0, ::ffff:127.0.0.1
+[2023-09-06T18:01:02.859] [ERROR] gameLog - [master.ts] a monitor disconnected: info-0, ::ffff:127.0.0.1
+[2023-09-06T18:01:07.883] [ERROR] gameLog - [master.ts] a monitor disconnected: con-0, ::ffff:127.0.0.1
+[2023-09-06T18:01:12.916] [ERROR] gameLog - [master.ts] a monitor disconnected: login, ::ffff:127.0.0.1
